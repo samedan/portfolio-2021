@@ -1,9 +1,12 @@
-import BaseLayout from "../../components/layouts/BaseLayout";
+import BaseLayout from "@/components/layouts/BaseLayout";
 import Link from "next/link";
-import axios from "axios";
-import BasePage from "../../components/BasePage";
+import BasePage from "@/components/BasePage";
+import { useGetPosts } from "@/actions";
 
-const Portfolios = ({ posts }) => {
+const Portfolios = () => {
+  // cache is stored in the 'data'
+  const { data, error, loading } = useGetPosts();
+
   const renderPosts = (posts) => {
     return posts.map((post) => (
       <li key={post.id}>
@@ -19,22 +22,12 @@ const Portfolios = ({ posts }) => {
     <BaseLayout>
       <BasePage>
         <h1>Portfolios</h1>
-        <u>{renderPosts(posts)}</u>
+        {loading && <p>Loading...</p>}
+        {data && <u>{renderPosts(data)}</u>}
+        {error && <div className="alert alert-danger">{error.message}</div>}
       </BasePage>
     </BaseLayout>
   );
-};
-
-Portfolios.getInitialProps = async () => {
-  let posts = [];
-  try {
-    const res = await axios.get("http://jsonplaceholder.typicode.com/posts");
-    posts = res.data;
-  } catch (error) {
-    console.log(error);
-  }
-
-  return { posts: posts.slice(0, 10) };
 };
 
 export default Portfolios;

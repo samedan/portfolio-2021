@@ -3,3 +3,5 @@ https://www.npmjs.com/package/win-node-env
 
 > NODE ENV on build:
 cross-env NODE_ENV=production node server.js
+
+> useSWR (Stale While Revalidate)

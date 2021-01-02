@@ -1,16 +1,5 @@
 import React, { useState } from "react";
-import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-} from "reactstrap";
+import { Collapse, Navbar, NavbarToggler, Nav, NavItem } from "reactstrap";
 import Link from "next/link";
 
 const BsNavLink = (props) => {
@@ -26,6 +15,13 @@ const BsNavBrand = () => (
   <Link href="/">
     <a className="navbar-brand port-navbar-brand">Popescu Daniel</a>
   </Link>
+);
+
+const LoginLink = () => (
+  <span className="nav-link port-navbar-link clickable">Login</span>
+);
+const LogoutLink = () => (
+  <span className="nav-link port-navbar-link clickable">Logout</span>
 );
 
 const Header = () => {
@@ -62,6 +58,14 @@ const Header = () => {
           </NavItem>
           <NavItem className="port-navbar-item">
             <BsNavLink title="CV" href="/cv" />
+          </NavItem>
+        </Nav>
+        <Nav navbar>
+          <NavItem className="port-navbar-item">
+            <LoginLink />
+          </NavItem>
+          <NavItem className="port-navbar-item">
+            <LogoutLink />
           </NavItem>
         </Nav>
       </Collapse>
