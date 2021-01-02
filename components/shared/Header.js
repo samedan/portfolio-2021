@@ -5,10 +5,8 @@ class Header extends React.Component {
   render() {
     return (
       <>
-        <p className="customClass">Styled P</p>
-        <p className="customClassFromFile">Styled P 2</p>
         <Link href="/">
-          <a style={{ fontSize: "30px" }}> Home </a>
+          <a> Home </a>
         </Link>
         <Link href="/about">
           <a> About </a>
