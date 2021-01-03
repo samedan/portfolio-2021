@@ -2,8 +2,10 @@ import BaseLayout from "@/components/layouts/BaseLayout";
 import Link from "next/link";
 import BasePage from "@/components/BasePage";
 import { useGetPosts } from "@/actions";
+import { useGetUser } from "@/actions/user";
 
 const Portfolios = () => {
+  const { data: dataU, loading: loadingU } = useGetUser();
   // cache is stored in the 'data'
   const { data, error, loading } = useGetPosts();
 
@@ -19,7 +21,7 @@ const Portfolios = () => {
   };
 
   return (
-    <BaseLayout>
+    <BaseLayout user={dataU} loading={loadingU}>
       <BasePage>
         <h1>Portfolios</h1>
         {loading && <p>Loading...</p>}

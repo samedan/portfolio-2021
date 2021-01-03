@@ -1,6 +1,7 @@
 import BaseLayout from "@/components/layouts/BaseLayout";
 import { Container, Col, Row } from "reactstrap";
 import Typed from "react-typed";
+import { useGetUser } from "@/actions/user";
 
 const ROLES = [
   "Developer",
@@ -12,9 +13,11 @@ const ROLES = [
 ];
 
 const Index = () => {
+  const { data, loading } = useGetUser();
+
   return (
     <>
-      <BaseLayout className="cover">
+      <BaseLayout user={data} loading={loading} className="cover">
         <div className="main-section">
           <div className="background-image">
             <img src="/images/background-index.png" />
