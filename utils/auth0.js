@@ -31,4 +31,19 @@ export const authorizeUser = async (req, res) => {
   return session.user;
 };
 
-// export const withAuth ()
+export const withAuth = (getData) => async ({ req, res }) => {
+  const session = await auth0.getSession(req);
+  if (!session || !session.user) {
+    // 302 redirect
+    res.writeHead(302, {
+      Location: "/api/v1/login",
+    });
+    res.end();
+    return { props: {} };
+  }
+
+  // if getData exists, execute it , if not => {}
+  const data = getData ? await getData({ req, res }, session.user) : {};
+
+  return { props: { user: session.user, ...data } };
+};

@@ -1,9 +1,8 @@
 import BaseLayout from "@/components/layouts/BaseLayout";
 import BasePage from "@/components/BasePage";
-// import { useGetUser } from "@/actions/user";
-import { authorizeUser } from "@/utils/auth0";
+import { withAuth } from "@/utils/auth0";
 
-const SecretSSR = ({ user }) => {
+const SecretSSR = ({ user, title }) => {
   // const { data, loading } = useGetUser();
 
   return (
@@ -16,34 +15,25 @@ const SecretSSR = ({ user }) => {
     >
       <BasePage>
         <h1>Secret - Hello {user && user.name}</h1>
+        <h2>{title}</h2>
       </BasePage>
     </BaseLayout>
   );
 };
 
-//SERVER AUTH
-export const getServerSideProps = async ({ req, res }) => {
-  const user = await authorizeUser(req, res);
-
-  return {
-    props: { user },
-  };
-
-  // const session = await auth0.getSession(req);
-  // if (!session || !session.user) {
-  //   // 302 redirect
-  //   res.writeHead(302, {
-  //     Location: "/api/v1/login",
-  //   });
-  //   res.end();
-  //   return { props: {} };
-  // }
-
-  // console.log(session.user); // on server console
-  // debugger; // not executed because server-side
-  // return {
-  //   // props provided to the page to display
-  //   props: { user: session.user },
+// server side async fetchData
+const getTitle = () => {
+  return new Promise((res) => {
+    setTimeout(() => {
+      res({ title: "My new Title" });
+    }, 500);
+  });
 };
+
+//SERVER AUTH
+export const getServerSideProps = withAuth(async ({ req, res }, user) => {
+  const title = await getTitle();
+  return title;
+});
 
 export default SecretSSR;
