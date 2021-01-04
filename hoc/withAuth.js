@@ -1,9 +1,11 @@
 import { Component } from "react";
 
 import { useGetUser } from "@/actions/user";
+import { isAuthorized } from "@/utils/auth0";
 import Redirect from "@/components/shared/Redirect";
 
-const withAuth = (Component) => {
+// export default withAuth(OnlyAdmin)("Admin");
+const withAuth = (Component) => (role) => {
   return (props) => {
     const { data, loading } = useGetUser();
 
@@ -20,6 +22,9 @@ const withAuth = (Component) => {
       // SSR - server side rendering
       return <Redirect ssr to="/api/v1/login" />;
     } else {
+      if (role && !isAuthorized(data, role)) {
+        return <Redirect ssr to="/api/v1/login" />;
+      }
       return <Component user={data} loading={loading} {...props} />;
     }
   };
