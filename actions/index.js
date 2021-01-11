@@ -10,18 +10,3 @@ export const fetcher = (url) =>
       return result;
     }
   });
-
-export const useGetPosts = () => {
-  // retrieve loading, useSWR doens't provide loading
-  const { data, error, ...rest } = useSWR("/api/v1/posts", fetcher);
-  return { data, error, loading: !data && !error, ...rest };
-};
-
-export const useGetPostById = (id) => {
-  // retrieve loading, useSWR doens't provide loading
-  const { data, error, ...rest } = useSWR(
-    id ? `/api/v1/posts/${id}` : null,
-    fetcher
-  );
-  return { data, error, loading: !data && !error, ...rest };
-};

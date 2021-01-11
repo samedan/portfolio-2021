@@ -1,35 +1,45 @@
 import BaseLayout from "@/components/layouts/BaseLayout";
-import Link from "next/link";
+
+import { Row, Col } from "reactstrap";
 import BasePage from "@/components/BasePage";
-import { useGetPosts } from "@/actions";
+import { useRouter } from "next/router";
 import { useGetUser } from "@/actions/user";
+import PortfolioApi from "@/lib/api/portfolios";
+import PortfolioCard from "@/components/PortfolioCard";
 
-const Portfolios = () => {
+const Portfolios = ({ portfolios }) => {
   const { data: dataU, loading: loadingU } = useGetUser();
-  // cache is stored in the 'data'
-  const { data, error, loading } = useGetPosts();
-
-  const renderPosts = (posts) => {
-    return posts.map((post) => (
-      <li key={post.id}>
-        {/* [id] comes from [id].js */}
-        <Link as={`/portfolios/${post.id}`} href="/portfolios/[id]">
-          <a>{post.title}</a>
-        </Link>
-      </li>
-    ));
-  };
+  const router = useRouter();
 
   return (
     <BaseLayout user={dataU} loading={loadingU}>
-      <BasePage>
-        <h1>Portfolios</h1>
-        {loading && <p>Loading...</p>}
-        {data && <u>{renderPosts(data)}</u>}
-        {error && <div className="alert alert-danger">{error.message}</div>}
+      <BasePage header="Portfolios" className="portfolio-page">
+        <Row>
+          {portfolios.map((portfolio) => (
+            <Col
+              key={portfolio._id}
+              onClick={() => {
+                router.push("/portfolios[id]", `/portfolios/${portfolio._id}`);
+              }}
+              md="4"
+            >
+              <PortfolioCard portfolio={portfolio} />
+            </Col>
+          ))}
+        </Row>
       </BasePage>
     </BaseLayout>
   );
 };
+
+// called during build time
+// improves performance
+export async function getStaticProps() {
+  const json = await new PortfolioApi().getAll();
+  const portfolios = json.data;
+  return {
+    props: { portfolios },
+  };
+}
 
 export default Portfolios;
