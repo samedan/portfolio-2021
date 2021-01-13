@@ -19,7 +19,7 @@ const Portfolios = ({ portfolios }) => {
             <Col
               key={portfolio._id}
               onClick={() => {
-                router.push("/portfolios[id]", `/portfolios/${portfolio._id}`);
+                router.push("/portfolios/[id]", `/portfolios/${portfolio._id}`);
               }}
               md="4"
             >

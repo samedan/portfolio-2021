@@ -7,7 +7,7 @@ const BasePage = (props) => {
       <Container>
         {header && (
           <div className="page-header">
-            <h1 className="page-header-title">{header}</h1>
+            <h2 className="page-header-title">{header}</h2>
           </div>
         )}
         {children}

@@ -49,9 +49,9 @@ const Header = ({ user, loading, className }) => {
       <Collapse isOpen={isOpen} navbar>
         <Nav className="mr-auto" navbar>
           <NavItem className="port-navbar-item">
-            <Link href="/">
-              <BsNavLink title="Home" href="/" />
-            </Link>
+            {/* <Link href="/"> */}
+            <BsNavLink title="Home" href="/" />
+            {/* </Link> */}
           </NavItem>
           <NavItem className="port-navbar-item">
             <BsNavLink title="About" href="/about" />
