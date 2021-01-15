@@ -1,28 +1,16 @@
 import axios from "axios";
-import { useState } from "react";
+import { useApiHandler } from "@/actions";
+import useSWR from "swr";
+import { fetcher } from "@/actions";
 
-function createPortfolio(data) {
-  return axios.post("/api/v1/portfolios", data);
-}
+const createPortfolio = (data) => axios.post("/api/v1/portfolios", data);
 
-export function useCreatePortfolio() {
-  const [reqState, setReqState] = useState({
-    error: null,
-    data: null,
-    loading: false,
-  });
+export const useCreatePortfolio = () => useApiHandler(createPortfolio);
 
-  const _createPortfolioHandler = async (...data) => {
-    setReqState({ error: null, data: null, loading: true });
-    try {
-      const json = await createPortfolio(...data);
-      setReqState({ error: null, data: json.data, loading: false });
-    } catch (error) {
-      const errorMessage =
-        (error.response && error.response.message) || "Oops, smth went wrong";
-      setReqState({ error: errorMessage, data: null, loading: false });
-    }
-  };
-
-  return [_createPortfolioHandler, { ...reqState }];
-}
+export const useGetPortfolio = (id) => {
+  const { data, error, ...rest } = useSWR(
+    id ? `/api/v1/portfolios/${id}` : null,
+    fetcher
+  );
+  return { data, error, loading: !data && !error, ...rest };
+};
