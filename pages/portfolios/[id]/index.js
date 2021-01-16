@@ -17,14 +17,6 @@ const Portfolio = ({ portfolio }) => {
   );
 };
 
-// SSR server side props - query comes from {context}
-// export async function getServerSideProps({ query }) {
-//   const json = await new PortfolioApi().getById(query.id);
-//   const portfolio = json.data;
-
-//   return { props: { portfolio } };
-// }
-
 // executed at the BUILD time
 export async function getStaticPaths() {
   const json = await new PortfolioApi().getAll();
