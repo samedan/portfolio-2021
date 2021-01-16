@@ -5,10 +5,30 @@ import withAuth from "@/hoc/withAuth";
 import PortfolioForm from "@/components/PortfolioForm";
 import { useGetPortfolio } from "@/actions/portfolios";
 import { Row, Col } from "reactstrap";
+import { useUpdatePortfolio } from "@/actions/portfolios";
+import { toast } from "react-toastify";
 
 const PortfolioEdit = ({ user }) => {
   const router = useRouter();
-  const { data } = useGetPortfolio(router.query.id);
+  const [updatePortfolio, { error }] = useUpdatePortfolio();
+  const { data: initialData } = useGetPortfolio(router.query.id);
+
+  // combines function with id
+  const _updatePortfolio = async (data) => {
+    try {
+      await updatePortfolio(router.query.id, data);
+      toast.success("Portfolio has been updated", { autoClose: 3000 });
+    } catch (error) {
+      toast.error("Edit failed", { autoClose: 3000 });
+    }
+
+    // PROMISE
+    // updatePortfolio(router.query.id, data)
+    //   .then(() =>
+    //     toast.success("Portfolio has been updated", { autoClose: 3000 })
+    //   )
+    //   .catch(() => toast.error("Some error", { autoClose: 3000 }));
+  };
 
   return (
     <>
@@ -16,12 +36,13 @@ const PortfolioEdit = ({ user }) => {
         <BasePage header="Edit Portfolio">
           <Row>
             <Col md="8">
-              {data && (
+              {initialData && (
                 <PortfolioForm
-                  onSubmit={(data) => alert(JSON.stringify(data))}
-                  initialData={data}
+                  onSubmit={_updatePortfolio}
+                  initialData={initialData}
                 />
               )}
+              {error && <div className="alert alert-danger mt-2">{error}</div>}
             </Col>
           </Row>
         </BasePage>

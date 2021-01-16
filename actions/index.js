@@ -23,10 +23,12 @@ export function useApiHandler(apiCall) {
     try {
       const json = await apiCall(...data);
       setReqState({ error: null, data: json.data, loading: false });
+      return json.data;
     } catch (error) {
       const errorMessage =
         (error.response && error.response.data) || "Oops, something went wrong";
       setReqState({ error: errorMessage, data: null, loading: false });
+      return Promise.reject(message);
     }
   };
 
