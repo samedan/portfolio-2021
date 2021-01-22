@@ -1,14 +1,13 @@
 import BaseLayout from "@/components/layouts/BaseLayout";
 import BasePage from "@/components/BasePage";
+import withAuth from "@/hoc/withAuth";
 import { Editor } from "slate-simple-editor";
 import { useCreateBlog } from "actions/blogs";
-import withAuth from "@/hoc/withAuth";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 
 const BlogEditor = ({ user, loading }) => {
   const router = useRouter();
-
   const [
     createBlog,
     { data: createdBlog, error, loading: blogLoading },
@@ -20,17 +19,13 @@ const BlogEditor = ({ user, loading }) => {
   };
 
   if (error) {
-    // toast.error(error.message);
-    toast.error("Error saving blog");
+    toast.error(error);
   }
+
   return (
     <BaseLayout user={user} loading={loading}>
       <BasePage>
-        <Editor
-          // header="Ypour own title"
-          loading={blogLoading}
-          onSave={saveBlog}
-        />
+        <Editor onSave={saveBlog} loading={blogLoading} />
       </BasePage>
     </BaseLayout>
   );
