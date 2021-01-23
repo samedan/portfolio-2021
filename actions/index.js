@@ -28,7 +28,7 @@ export function useApiHandler(apiCall) {
       const errorMessage =
         (error.response && error.response.data) || "Oops, something went wrong";
       setReqState({ error: errorMessage, data: null, loading: false });
-      return Promise.reject(message);
+      return Promise.reject(errorMessage);
     }
   };
 
