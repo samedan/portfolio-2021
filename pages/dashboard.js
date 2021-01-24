@@ -7,14 +7,34 @@ import auth0 from "utils/auth0";
 import BlogApi from "lib/api/blogs";
 import Link from "next/link";
 import PortDropdown from "components/shared/Dropdown";
+import { useUpdateBlog } from "actions/blogs";
 
 const Dashboard = ({ user, blogs }) => {
+  const [updateBlog] = useUpdateBlog();
+
+  const changeBlogStatus = async (blogId, status) => {
+    await updateBlog(blogId, { status });
+  };
+
+  const createOption = (blogStatus) => {
+    return blogStatus === "draft"
+      ? { view: "Publish story", value: "published" }
+      : {
+          view: "Make a draft",
+          value: "draft",
+        };
+  };
+
   const createOptions = (blog) => {
+    const option = createOption(blog.status);
+
     return [
       {
         key: `${blog._id}-published`,
-        text: "Published",
-        handlers: { onClick: () => alert(`Published on ${blog._id}`) },
+        text: option.view,
+        handlers: {
+          onClick: () => changeBlogStatus(blog._id, option.value),
+        },
       },
       {
         key: `${blog._id}-delete`,
