@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from "react";
 import BaseLayout from "@/components/layouts/BaseLayout";
 import { Container, Col, Row } from "reactstrap";
 import Typed from "react-typed";
@@ -13,14 +14,32 @@ const ROLES = [
 ];
 
 const Index = () => {
+  const [isFlipping, setIsFlipping] = useState(false);
   const { data, loading } = useGetUser();
+  // 'useRef' insures that the 'flipInterval' stays the same even after reload/re-render
+  const flipInterval = useRef();
+
+  useEffect(() => {
+    startAnimation();
+    // reset flipInterval when going to another page
+    return () => flipInterval.current && clearInterval(flipInterval.current);
+  }, []);
+
+  const startAnimation = () => {
+    // setIsFlipping(!isFlipping) doesn't work in setInterval
+    // current is teh reference (useRef)
+    flipInterval.current = setInterval(() => {
+      setIsFlipping((prevFlipping) => !prevFlipping);
+    }, 7000);
+  };
 
   return (
     <>
       <BaseLayout
         user={data}
         loading={loading}
-        className="cover"
+        // bakcground color
+        className={`cover ${isFlipping ? "cover-orange" : "cover-blue"}`}
         navClass="transparent"
       >
         <div className="main-section">
@@ -32,8 +51,8 @@ const Index = () => {
             <Row>
               <Col md="6">
                 <div className="hero-section">
-                  <div className={`flipper`}>
-                    <div className="back">
+                  <div className={`flipper ${isFlipping ? " isFlipping" : ""}`}>
+                    <div className="front">
                       <div className="hero-section-content">
                         <h2> Full Stack Web Developer </h2>
                         <div className="hero-section-content-intro">
@@ -42,6 +61,18 @@ const Index = () => {
                       </div>
                       <img className="image" src="/images/section-1.png" />
                       <div className="shadow-custom">
+                        <div className="shadow-inner"> </div>
+                      </div>
+                    </div>
+                    <div className="back">
+                      <div className="hero-section-content">
+                        <h2> Full Stack Web Developer </h2>
+                        <div className="hero-section-content-intro">
+                          Have a look at my portfolio and job history.
+                        </div>
+                      </div>
+                      <img className="image" src="/images/section-2.png" />
+                      <div className="shadow-custom shadow-custom-orange">
                         <div className="shadow-inner"> </div>
                       </div>
                     </div>
