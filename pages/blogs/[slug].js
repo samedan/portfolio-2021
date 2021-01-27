@@ -4,9 +4,10 @@ import { useGetUser } from "@/actions/user";
 import BlogApi from "lib/api/blogs";
 import { Col, Row } from "reactstrap";
 import { SlateView } from "slate-simple-editor";
+import Avatar from "components/shared/Avatar";
 
-const BlogDetail = ({ blog }) => {
-  console.log(blog);
+const BlogDetail = ({ blog, author }) => {
+  console.log(blog, author);
   const { data, loading } = useGetUser();
 
   return (
@@ -21,6 +22,12 @@ const BlogDetail = ({ blog }) => {
           }}
         >
           <Col>
+            <Avatar
+              name={author.name}
+              image={author.picture}
+              date={blog.createdAt}
+            />
+            <hr />
             <SlateView initialContent={blog.content} />
           </Col>
         </Row>
@@ -30,11 +37,11 @@ const BlogDetail = ({ blog }) => {
 };
 
 export async function getStaticPaths() {
-  const json = await new BlogApi().getAll();
-  const blogs = json.data;
-  const paths = blogs.map((b) => {
+  const { data } = await new BlogApi().getAll();
+  // const blogs = json.data;
+  const paths = data.map(({ blog }) => {
     return {
-      params: { slug: b.slug },
+      params: { slug: blog.slug },
     };
   });
   return {
@@ -45,8 +52,11 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const json = await new BlogApi().getBySlug(params.slug);
-  return { props: { blog: json.data } };
+  const {
+    data: { blog, author },
+  } = await new BlogApi().getBySlug(params.slug);
+
+  return { props: { blog, author } };
 }
 
 export default BlogDetail;

@@ -38,10 +38,10 @@ const Blogs = ({ blogs }) => {
 };
 
 export async function getStaticProps() {
-  const json = await new BlogApi().getAll();
-  console.log(json);
+  const { data } = await new BlogApi().getAll();
+  const blogs = data.map((item) => ({ ...item.blog, author: item.author }));
   return {
-    props: { blogs: json.data },
+    props: { blogs },
     // we will attempt to re-generate the page:
     // - when a request comes in
     // - at most once every 60 seconds

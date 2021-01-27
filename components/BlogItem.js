@@ -13,7 +13,7 @@ const BlogItem = ({ blog }) => {
         </Link>
         <p className="post-meta">
           Posted by
-          <a href="#"> Filip Jerga </a>-
+          <a href="#"> {blog.author.name} </a>-
           {/* "2021-01-23T09:19:18.915Z".split('T')[0].split('-).join(':') */}
           {/* "2021:01:23" */}
           {moment(blog.createdAt).format("LLLL")}
