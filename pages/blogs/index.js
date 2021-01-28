@@ -23,7 +23,7 @@ const Blogs = ({ blogs }) => {
         <span className="subheading">Programming, travelling...</span>
       </Masthead>
 
-      <BasePage className="blog-body">
+      <BasePage title="Newest Blogs - Popescu Daniel" className="blog-body">
         <Row>
           {blogs.map((blog) => (
             <Col md="10" lg="8" className="mx-auto" key={blog._id}>

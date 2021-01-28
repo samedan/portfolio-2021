@@ -34,7 +34,12 @@ const Portfolios = ({ portfolios: initialPortfoliosFromProps }) => {
 
   return (
     <BaseLayout user={dataU} loading={loadingU}>
-      <BasePage header="Portfolios" className="portfolio-page">
+      <BasePage
+        title="Newest Portfolios"
+        header="Portfolios"
+        metaDescription="My portfolio"
+        className="portfolio-page"
+      >
         <Row>
           {portfolios.map((portfolio) => (
             <Col

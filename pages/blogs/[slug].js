@@ -12,7 +12,11 @@ const BlogDetail = ({ blog, author }) => {
 
   return (
     <BaseLayout user={data} loading={loading}>
-      <BasePage className="slate-container">
+      <BasePage
+        title={`${blog.title} - Popescu Daniel`}
+        metaDescription={blog.subTitle.substr(0, 160)}
+        className="slate-container"
+      >
         <Row
           md={{
             // 8 out of 12 columns
