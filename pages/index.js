@@ -57,13 +57,15 @@ const Index = () => {
                       className={`flipper ${isFlipping ? " isFlipping" : ""}`}
                     >
                       <div className="front">
-                        <div className="hero-section-content">
-                          <h2> Full Stack Web Developer </h2>
-                          <div className="hero-section-content-intro">
-                            Have a look at my portfolio and job history.
+                        <div className="image image-1">
+                          <div className="hero-section-content">
+                            <h2> Full Stack Web Developer </h2>
+                            <div className="hero-section-content-intro">
+                              Have a look at my portfolio and job history.
+                            </div>
                           </div>
                         </div>
-                        <img className="image" src="/images/section-1.png" />
+
                         <div className="shadow-custom">
                           <div className="shadow-inner"> </div>
                         </div>
