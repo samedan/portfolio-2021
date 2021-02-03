@@ -3,71 +3,72 @@ import BasePage from "@/components/BasePage";
 import { useGetUser } from "@/actions/user";
 import { formatDate } from "helpers/functions";
 import PortfolioApi from "@/lib/api/portfolios";
+import { useRouter } from "next/router";
 
 const Portfolio = ({ portfolio }) => {
+  const router = useRouter();
   const { data: dataU, loading: loadingU } = useGetUser();
 
-  // TODO: styling
+  if (router.isFallback) {
+    return "Loading...";
+  }
+
   return (
-    <>
-      <BaseLayout navClass="transparent" user={dataU} loading={loadingU}>
-        <BasePage
-          noWrapper
-          indexPage
-          title={`${portfolio.title} - Popescu Daniel`}
-          // header="Portfolio Detail"
-          metaDescription={portfolio.description.substr(0, 160)}
-        >
-          <div className="portfolio-detail">
-            <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
-              <main role="main" class="inner page-cover">
-                <h1 class="cover-heading">{portfolio.title}</h1>
-                <p class="lead dates">
-                  {formatDate(portfolio.startDate)} -{" "}
-                  {formatDate(portfolio.endDate) || "Today"}
-                </p>
-                <p class="lead info mb-0">
-                  {portfolio.jobTitle} | {portfolio.company} |{" "}
-                  {portfolio.location}
-                </p>
-                <p class="lead">{portfolio.description}</p>
-                <p class="lead">
-                  <a
-                    href={portfolio.companyWebsite}
-                    class="btn btn-lg btn-secondary"
-                  >
-                    Visit Company
-                  </a>
-                </p>
-              </main>
-            </div>
+    <BaseLayout navclassName="transparent" user={dataU} loading={loadingU}>
+      <BasePage
+        noWrapper
+        indexPage
+        title={`${portfolio.title} - Filip Jerga`}
+        metaDescription={portfolio.description}
+      >
+        <div className="portfolio-detail">
+          <div className="cover-container d-flex h-100 p-3 mx-auto flex-column">
+            <main role="main" className="inner page-cover">
+              <h1 className="cover-heading">{portfolio.title}</h1>
+              <p className="lead dates">
+                {formatDate(portfolio.startDate)} -{" "}
+                {formatDate(portfolio.endDate) || "Present"}
+              </p>
+              <p className="lead info mb-0">
+                {portfolio.jobTitle} | {portfolio.company} |{" "}
+                {portfolio.location}
+              </p>
+              <p className="lead">{portfolio.description}</p>
+              <p className="lead">
+                <a
+                  href={portfolio.companyWebsite}
+                  target="_"
+                  className="btn btn-lg btn-secondary"
+                >
+                  Visit Company
+                </a>
+              </p>
+            </main>
           </div>
-        </BasePage>
-      </BaseLayout>
-    </>
+        </div>
+      </BasePage>
+    </BaseLayout>
   );
 };
 
-// executed at the BUILD time
 export async function getStaticPaths() {
+  console.log("reexecuting getStaticPaths");
   const json = await new PortfolioApi().getAll();
   const portfolios = json.data;
-
-  // create (pre-render pages) on server, get the dynamic paths
   const paths = portfolios.map((portfolio) => {
     return {
       params: { id: portfolio._id },
     };
-  }); // paths = [{params: id:'_id1'},{params: id:'_id2'},{params: id:'_id3'},]
+  });
 
-  // falback = page not found, return 404 page
-  return { paths, fallback: false };
+  return { paths, fallback: true };
 }
 
 export async function getStaticProps({ params }) {
+  console.log("reexecuting getStaticProps");
   const json = await new PortfolioApi().getById(params.id);
   const portfolio = json.data;
-  return { props: { portfolio } };
+  return { props: { portfolio }, revalidate: 1 };
 }
 
 export default Portfolio;

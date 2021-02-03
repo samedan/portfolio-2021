@@ -5,10 +5,16 @@ import BlogApi from "lib/api/blogs";
 import { Col, Row } from "reactstrap";
 import { SlateView } from "slate-simple-editor";
 import Avatar from "components/shared/Avatar";
+import { useRouter } from "next/router";
 
 const BlogDetail = ({ blog, author }) => {
   console.log(blog, author);
+  const router = useRouter();
   const { data, loading } = useGetUser();
+
+  if (router.isFallback) {
+    return "Loading...";
+  }
 
   return (
     <BaseLayout user={data} loading={loading}>
@@ -51,7 +57,7 @@ export async function getStaticPaths() {
   return {
     paths,
     // 404 error
-    fallback: false,
+    fallback: true,
   };
 }
 
@@ -60,7 +66,7 @@ export async function getStaticProps({ params }) {
     data: { blog, author },
   } = await new BlogApi().getBySlug(params.slug);
 
-  return { props: { blog, author } };
+  return { props: { blog, author }, revalidate: 60 };
 }
 
 export default BlogDetail;
