@@ -18,7 +18,7 @@ const Portfolio = ({ portfolio }) => {
       <BasePage
         noWrapper
         indexPage
-        title={`${portfolio.title} - Filip Jerga`}
+        title={`${portfolio.title} - Popescu Daniel`}
         metaDescription={portfolio.description}
       >
         <div className="portfolio-detail">
