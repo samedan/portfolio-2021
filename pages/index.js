@@ -36,7 +36,7 @@ const Index = () => {
       navClass="transparent"
       className={`cover ${isFlipping ? "cover-orange" : "cover-blue"}`}
     >
-      <BasePage indexPage title="Portfolio - Filip Jerga">
+      <BasePage indexPage title="Portfolio - Popescu Daniel">
         <div className="main-section">
           <div className="background-image">
             <img src="/images/background-index.png" />
@@ -78,7 +78,7 @@ const Index = () => {
               <Col md="6" className="hero-welcome-wrapper">
                 <div className="hero-welcome-text">
                   <h1>
-                    Welcome to the portfolio website of Filip Jerga. Get
+                    Welcome to the portfolio website of Daniel Popescu. Get
                     informed, collaborate and discover projects I was working on
                     through the years!
                   </h1>
