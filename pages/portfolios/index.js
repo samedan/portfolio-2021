@@ -8,6 +8,7 @@ import { useDeletePortfolio } from "@/actions/portfolios";
 import PortfolioApi from "@/lib/api/portfolios";
 import PortfolioCard from "@/components/PortfolioCard";
 import { isAuthorized } from "@/utils/auth0";
+import { urlObjectKeys } from "next/dist/next-server/lib/utils";
 
 const Portfolios = ({ portfolios: initialPortfoliosFromProps }) => {
   const { data: dataU, loading: loadingU } = useGetUser();

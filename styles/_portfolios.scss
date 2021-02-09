@@ -47,4 +47,13 @@
   .create-port-btn {
     margin-bottom: 20px;
   }
+  .image-cardbody {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: inherit;
+    height: unset;
+    z-index: 1;
+    opacity: 0.2;
+  }
 }

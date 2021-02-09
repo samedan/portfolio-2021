@@ -1,18 +1,29 @@
 import DatePicker from "react-datepicker";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useMutate } from "restful-react";
+import { data } from "data";
 
 const PortfolioForm = ({ onSubmit, initialData = {} }) => {
-  const { register, handleSubmit, setValue } = useForm({
+  const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: initialData,
   });
+  const [selectedImage, setSelectedImage] = useState();
+  const [images, setImages] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
+  // UPLOAD IMAGE
+  const { mutate: uploadImage } = useMutate({
+    verb: "POST",
+    path: "http://localhost:3001/api/v1/portfolios/image-upload",
+  });
+
   useEffect(() => {
     register({ name: "startDate" });
+    register({ name: "images" });
     register({ name: "endDate" });
-  }, [register]);
+  }, [register, images]);
 
   useEffect(() => {
     const { startDate, endDate } = initialData;
@@ -22,12 +33,58 @@ const PortfolioForm = ({ onSubmit, initialData = {} }) => {
     if (endDate) {
       setEndDate(new Date(endDate));
     }
+    if (images) {
+      setValue("images", images);
+    }
   }, [initialData]);
 
   const handleDateChange = (dateType, setDate) => (date) => {
     setValue(dateType, date);
+
     setDate(date);
   };
+
+  // const onSubmit = (data) => {
+  //   console.log(data);
+
+  //   // data["images"] = [images];
+  // };
+
+  const handleChange = (event) => {
+    setSelectedImage(event.target.files[0]);
+  };
+
+  const handleImageUpload = (e) => {
+    e.preventDefault();
+    if (!selectedImage) {
+      return;
+    }
+    const formData = new FormData();
+    formData.append("image", selectedImage);
+
+    uploadImage(formData)
+      .then((uploadedImage) => {
+        console.log(uploadedImage);
+        // data["images"] = [uploadedImage];
+        setImages([...images, uploadedImage]);
+
+        console.log("images", images);
+        // setValue("images", images);
+        // setValue("images", [uploadedImage]);
+      })
+      .catch((_) => {
+        console.log("oops, smth went wrong");
+      });
+  };
+
+  const displayImages = () =>
+    images.map((image) => (
+      <div key={image.cloudinaryId} className="col-md-3">
+        <a className="d-block mb-4 h-100" target="_blank" href={image.url}>
+          <img className="imf-fluid img-thumbnail" src={image.url} />
+        </a>
+      </div>
+    ));
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -96,6 +153,26 @@ const PortfolioForm = ({ onSubmit, initialData = {} }) => {
           className="form-control"
           id="description"
         ></textarea>
+      </div>
+      <div className="form-group">
+        <label htmlFor="images">Image upload:</label>
+        <input
+          name="images"
+          onChange={handleChange}
+          accept=".jpg, .png, .jpeg"
+          className="file-input mb-2"
+          type="file"
+        />
+        <div>
+          <button
+            disabled={!selectedImage}
+            onClick={handleImageUpload}
+            className="btn btn-primary mb-2"
+          >
+            Upload
+          </button>
+        </div>
+        {images ? displayImages() : "Please upload images"}
       </div>
 
       <div className="form-group">
