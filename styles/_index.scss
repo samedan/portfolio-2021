@@ -1,11 +1,16 @@
 // Index -----------
 
 .cover.cover-orange {
-  background-image: linear-gradient(
-    45deg,
-    rgb(254, 202, 83),
-    rgb(253, 157, 97)
-  );
+  // background-image: linear-gradient(
+  //   45deg,
+  //   rgb(254, 202, 83),
+  //   rgb(253, 157, 97)
+  // );
+  background-image: url("/images/background-orange.svg");
+  background-repeat: no-repeat;
+  overflow: hidden;
+  position: relative;
+  background-size: contain;
 }
 
 .flipper {
@@ -39,9 +44,12 @@
 }
 
 .cover {
-  background-image: linear-gradient(45deg, #00aeef 0%, #096fb9 100%);
+  // background-image: linear-gradient(45deg, #00aeef 0%, #096fb9 100%);
+  background-image: url("/images/background.svg");
+  background-repeat: no-repeat;
   overflow: hidden;
   position: relative;
+  background-size: contain;
 }
 
 .wrapper {
